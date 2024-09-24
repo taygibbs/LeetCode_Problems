@@ -12,7 +12,10 @@ This is a set of code that I am writing to work with the LeetCode problems.
 import os
 
 
-
+class ListNode:
+    def __init__(self, val = 0, next = None):
+        self.val = val
+        self.next = next
 
 
 #Problem 88:
@@ -24,35 +27,6 @@ Merge nums1 and nums2 into a single array sorted in non-decreasing order.
 
 The final sorted array should not be returned by the function, but instead be stored inside the array nums1.
 To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.
-"""
-""" Some examples:
-    Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
-Output: [1,2,2,3,5,6]
-Explanation: The arrays we are merging are [1,2,3] and [2,5,6].
-The result of the merge is [1,2,2,3,5,6] with the underlined elements coming from nums1
-
-Example 2:
-
-Input: nums1 = [1], m = 1, nums2 = [], n = 0
-Output: [1]
-Explanation: The arrays we are merging are [1] and [].
-The result of the merge is [1].
-Example 3:
-
-Input: nums1 = [0], m = 0, nums2 = [1], n = 1
-Output: [1]
-Explanation: The arrays we are merging are [] and [1].
-The result of the merge is [1].
-Note that because m = 0, there are no elements in nums1. The 0 is only there to ensure the merge result can fit in nums1.
- 
-
-Constraints:
-
-nums1.length == m + n
-nums2.length == n
-0 <= m, n <= 200
-1 <= m + n <= 200
--109 <= nums1[i], nums2[j] <= 109
 """
 
 def MergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> None:
@@ -120,7 +94,7 @@ def twoSum(nums: list[int], target: int) -> list[int]:
    for i in range(len(nums)):
         #print(i)
         for k in range(len(nums)):
-            if i == k:
+            if i <= k:
                 continue
             
             if nums[i] + nums[k] == target:
@@ -136,7 +110,9 @@ def twoSum(nums: list[int], target: int) -> list[int]:
 #The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
 #You may assume the two numbers do not contain any leading zero, except the number 0 itself.
             
-def addTwoNumbers(l1: list, l2: list) -> list:
+def addTwoNumbers(l1: ListNode, l2: ListNode) -> ListNode:
+    """ The code below is my first attempt at the problem. However, while running the code in the leetcode editor and running it, I realized that
+        this code would not work due to my using of list, and not listNode (because for some reason my IDE doesn't like it...')
     l1.reverse()
     l2.reverse()
     print(f"l1 Reversed: {l1} \nl2 Reversed: {l2}")
@@ -146,12 +122,97 @@ def addTwoNumbers(l1: list, l2: list) -> list:
     l3 = [int(i) for i in str(l3)]
     l3.reverse()
     return l3
+    """
+    dummy = ListNode()
+    result = dummy
+    
+    total = carry = 0
+    
+    while l1 != None or l2 != None or carry != None: #Only continues if the lists are nonempty
+        
+        total = carry 
+        
+        if l1:
+            total += l1.val
+            l1 = l1.next
+            
+        if l2:
+            total += l2.val
+            l2 = l2.next
+            
+        num = total % 10
+        carry = total
+        dummy.next = ListNode(num)
+        dummy = dummy.next
+            
+    return result.next
+
+
+#Problem 3: Longest Substring Without Repeating Characters
+
+def lengthOfLongestSubstring(s: str) -> int:
+    #Find the longest substring without repeating characters
+    """   
+    #First Attempt is a bit of a brute force. I got some examples to work, but not many. maybe 1/3
+    
+    m = len(s)
+    
+    temp = ''
+    soln = ''
+    repeat = True #the way to check if the string needs to restart
+    
+    for i in range(m):
+        print(f'Running i = {i}')
+        if i == 0 or repeat == True: #
+            print('Initial/Restart')
+            temp += s[i]
+            
+            repeat = False
+            continue
+        
+        for k in temp: #Checking to see if the currently looked at letter has been seen in the current temp string
+            print('Checking if there is a repeat')
+            if k == s[i] or i == m: #If one of the letters is the currently looked at letter, or at the end of the og string
+                print(f'k = {k}    s[i] = {s[i]}')
+                repeat = True #The letter has been repeated
+                break
+           
+        
+        if i > 0 and repeat == True:
+            if len(temp) > len(soln) and len(temp) > 1:
+                soln = temp
+                temp = '' + s[i]
+        elif repeat == False:
+            temp += s[i]
+            
+    #print(soln)
+    return len(soln)
+    """
+    
+    
+    #The second attempt of this problem was more researched and was decided to work on a solution called the 
+    #sliding window 
+    
+    start = 0 # Windows starting index
+    end = 0 #windows ending index
+    temp = {}
+    longest = 0
+    
+    for end in range(len(s)):
+        current = s[end] #Using the end index because itll be the newest letter to be checked.
+        start = max(start, temp.get(current,0)) #This will keep start at the same index if the letter has not been seen, but move to the 
+                                            # start index to the end in order to start a new window
+        longest = max(longest, end - start + 1) #checks the lengths of the window
+        
+        temp[current] = end + 1
+    
+    return longest
 
 
 #Main code:
     
 #Whenever a problem is added, I will add it as part of the dictionary and call it using a match case system.
-problems = {0: 'Exit Program', 88:'MergeSortedArray',1:'twoSum',2:'addTwoNumbers'}
+problems = {0: 'Exit Program', 88:'MergeSortedArray',1:'twoSum',2:'addTwoNumbers (IN PROGRESS',3:'lengthOfLongestSubstring'}
 problems = sorted(problems.items())
 print('What problem would you like to see?\n I have:')
 print(problems)
@@ -186,11 +247,31 @@ match prob:
         l1 = [[2,4,3],[0],[9,9,9,9,9,9,9]]
         l2 = [[5,6,4],[0],[9,9,9,9]]
         
+        #l1 = ListNode(2)
+        
         for i in range(len(l1)):
             print('Inputting:')
             print(f'l1: {l1[i]}, l2: {l2[i]}')
             print(f'The resulting added list: {addTwoNumbers(l1[i],l2[i])}')
             print('=' * terminal_size.columns)
+            
+    case '3':
+        print('You Selected the lengthOfLongestSubstring problem:')
+        s = ['abcabcbb','bbbbb','pwwkew']
+        
+        for i in s:
+            print(f'Inputting: s = {i}')
+            print(f'Longest Substring has length: {lengthOfLongestSubstring(i)}')
+            print('=' * terminal_size.columns)
+            
+        own_string = input('Would you like to try putting in your own string? (y/n) ')
+        if own_string == 'y':
+            print('Great! Type in your own string, without spaces of course!')
+            new_s = input()
+            print(f'The string "{new_s}" has a longest substring of length {lengthOfLongestSubstring(new_s)}')
+        elif own_string == 'n' or own_string == None:
+            print('Exiting...')
+            exit()
     case 0:
         print('Exiting Program')
         exit()
