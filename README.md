@@ -1,8 +1,12 @@
 # LeetCode Problem Solution Notes/Thoughts
  Wrote by Taylor Gibbons with the intent to practice coding concepts
 
-# Problems in numerical order:
-## 1. twoSum Problem:
+## Table of Contents:
+1. [twoSum Problem](#1.)
+
+
+
+# 1. twoSum Problem:
 **[TASK]** In this problem, the task is to find the indices of a list that will sum to a target number. For example:  `nums = [2,7,11,15]` and `target = 9`. The resulting output will be `soln = [0,1]` because those correspond to the numbers 2 and 7, which sum up to 9.
 
 **[PROCESS]** The first thing that came to mind when dealing with this problem is how I would go along solving it as a math problem. Intuitively, I would go from the first element, add it with the second, see if it is equal to the target, and if not, then move to the next element, where the first element is now added with the third, then checked and repeated. Then if the first and last elements do not match, it moves to checking if the second value added with any of the other values equals target, and thus continues. To put this into code, I made two `for` loops where the first loop is the initial value that will be added to the others, and the inner loop is the loop running through the rest of the values. Then it would check to see if the sum is equal to the target. If it were equal, it would break the loops and return the indices; if not equal, it would run the loop again with the initial value moved over one. 
@@ -17,9 +21,8 @@ This is about the time that I ended up realizing that I messed up and was thinki
 ## 3. lengthOfLongestSubstring Problem:
 **[TASK]** In this problem, the task is to find the length of the longest substring, of a larger string, without having any repeated letters. For example: `s = "abcabcbb"` will result with `num = 3` since the longest substring without a repeat is `"abc"`.
 
-**[PROCESS]** When planning out how I was going to tackle this problem, I decided to try to think of it logically. If I had the function start with the first letter of the string, then check to make sure that the next letter in the string, has not been already added. If it has been added, it will take note of the length of the temp string, then restart by adding the next string letter and checking. To better show my thinking about this problem, I made a simple flowchart: 
-
-![alt Text](https://github.com/taygibbs/LeetCode_Problems/tree/main/Flowcharts/Problem3FC.PNG?raw=true)
+**[PROCESS]** When planning out how I was going to tackle this problem, I decided to try to think of it logically. If I had the function start with the first letter of the string, then check to make sure that the next letter in the string, has not been already added. If it has been added, it will take note of the length of the temp string, then restart by adding the next string letter and checking. To better show my thinking about this problem, I made a simple ![flowchart](https://github.com/taygibbs/LeetCode_Problems/tree/main/Flowcharts/Problem3FC.PNG?raw=true) that shows the general flow of my thinking. 
+With this idea, I made a function that I thought would work, and I got really close. However, the only time that this function I made does not work is when the string is a single letter repeated several times. Due to this, I will keep working on it, but I did end up researching ways to work on this problem. The next way that I saw would work for a problem similar to this is called a sliding window, where instead of looking through each letter and checking each new letter to see if it is in the temp string, it slides a "window" that covers the looked at elements, and then checks if the next element is in that window. If it is, then the window is noted and it starts over; if not, it will increase the window size to cover the new letter and move to the next. 
 
 
 
