@@ -18,7 +18,8 @@ This is about the time that I ended up realizing that I messed up and was thinki
 **[TASK]** In this problem, the task is to find the length of the longest substring, of a larger string, without having any repeated letters. For example: `s = "abcabcbb"` will result with `num = 3` since the longest substring without a repeat is `"abc"`.
 
 **[PROCESS]** When planning out how I was going to tackle this problem, I decided to try to think of it logically. If I had the function start with the first letter of the string, then check to make sure that the next letter in the string, has not been already added. If it has been added, it will take note of the length of the temp string, then restart by adding the next string letter and checking. To better show my thinking about this problem, I made a simple flowchart: 
-![alt Text]([https://github.com/](https://github.com/taygibbs/LeetCode_Problems/edit/main/Flowcharts/Porblem3FC.png))
+
+![alt Text](https://github.com/taygibbs/LeetCode_Problems/tree/main/Flowcharts/Problem3FC.PNG?raw=true)
 
 
 
