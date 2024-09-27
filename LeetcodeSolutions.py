@@ -7,16 +7,46 @@ Created on Fri Sep 20 18:31:27 2024
 
 This is a set of code that I am writing to work with the LeetCode problems.
 """
-#Imports
-#import collections
-import os
 
+import os
+from collections import OrderedDict
 
 class ListNode:
     def __init__(self, val = 0, next = None):
         self.val = val
         self.next = next
 
+def get_problems(val = None):
+    problems = {0: 'Exit Program', 
+                88:'MergeSortedArray',
+                1:'twoSum',
+                2:'addTwoNumbers (IN PROGRESS)',
+                3:'lengthOfLongestSubstring',
+                4: 'findMedianOfSortedArray', 
+                7: 'reverseInteger', 
+                8: 'String to Integer (atoi)',
+                }
+    
+    sort_probs = sorted(problems.items())
+    
+    if val == None:
+        for key, value in sort_probs:
+            print(key, ":", value, ' : ', get_description(key))
+    else:
+        print(problems[val])
+        
+def get_description(val: int) -> str:
+    desc = {0:'',
+            88:'Merges two sorted arrays into one sorted array',
+            1: 'Finds the earliest indecies which the elements sum to a targeted number',
+            2: 'Adds two LinkedNode lists together reversed', 
+            3: 'Finds the length of the longest substring in a larger string',
+            4: 'Finds the median number of a sorted array',
+            7: 'Takes in an integer and reverses the numbers (ie, 123 -> 321)',
+            8: 'Takes in a string and will find the first set of numbers and its sign (+/-)'
+            }
+                
+    return desc[val]
 
 #Problem 88:
 """
@@ -208,70 +238,103 @@ def lengthOfLongestSubstring(s: str) -> int:
     
     return longest
 
-
-#Main code:
+#Problem #4: Median of Two Sorted Arrays
+def findMedianSortedArrays(nums1: list[int], nums2: list[int]) -> float:
     
-#Whenever a problem is added, I will add it as part of the dictionary and call it using a match case system.
-problems = {0: 'Exit Program', 88:'MergeSortedArray',1:'twoSum',2:'addTwoNumbers (IN PROGRESS',3:'lengthOfLongestSubstring'}
-problems = sorted(problems.items())
-print('What problem would you like to see?\n I have:')
-print(problems)
-prob = input('\nInput the number of the problem you would like to see: ')
-terminal_size = os.get_terminal_size()
-print('=' * terminal_size.columns)
-match prob:
-    case '88':
-        print('You Selected the MergeSortedArrays Problem:')
-        nums1 = [[1,2,3,0,0,0],[1],[0]]
-        nums2 = [[2,5,6],[],[1]]
-        m = [3,1,0]
-        n = [3,0,1]
-        for i in range(len(nums1)):
-            print('Inputting:')
-            print(f"nums1: {nums1[i]} -> m = {m[i]}, nums2: {nums2[i]} -> n = {n[i]}")
-            print(MergeSortedArray(nums1[i], m[i], nums2[i], n[i]))
-            print('=' * terminal_size.columns)
-    case '1':
-        print('You Selected the sumTwo Problem:')
-        nums = [[2,7,11,15],[3,2,4],[3,3]] 
-        target = [9,6,6]
+    if len(nums1) > len(nums2):
+        for i in nums2:
+            nums1.append(i)
+            
+        merged = nums1
+    else:
+        for i in nums1:
+           nums2.append(i)
+    
+        merged = nums2
+    merged.sort()    
+    size = len(merged)
+    if size % 2 == 0: #even number of elements, thus median is the middle two elements added and divided by 2
+        mid_ind = size // 2 
+        soln = (merged[mid_ind - 1] + merged[mid_ind])/2
+    else:
+        soln = float(merged[size //2]) #odd number of elements, thus median is the very middle element
 
-        for i in range(len(nums)):
-            print('inputting:')
-            print(f"nums: {nums[i]},target = {target[i]}")
-            print(f"The indexes of the solution are: {twoSum(nums[i],target[i])}")
-            print('=' * terminal_size.columns)
-            
-    case '2':
-        print('You Selected the addTwoNumbers Problem:')
-        l1 = [[2,4,3],[0],[9,9,9,9,9,9,9]]
-        l2 = [[5,6,4],[0],[9,9,9,9]]
+    return soln
+
+#Problem #5: Longest Palindromic Substring
+def longestPalindrome(s: str) -> str:
+    
+    #checking to see if string is a palindrome
+    reverse = s
+    reverse.reverse()
+    
+    if reverse == s:
+        print('Palindrome')
         
-        #l1 = ListNode(2)
+#Problem #7 ReverseInteger
+def reverse(x:int) -> int:
+    
+        negative = False
+        temp = [str(i) for i in str(x)]
+
+        if temp[0] == '-':
+            negative = True
+            temp = temp[1:]
         
-        for i in range(len(l1)):
-            print('Inputting:')
-            print(f'l1: {l1[i]}, l2: {l2[i]}')
-            print(f'The resulting added list: {addTwoNumbers(l1[i],l2[i])}')
-            print('=' * terminal_size.columns)
-            
-    case '3':
-        print('You Selected the lengthOfLongestSubstring problem:')
-        s = ['abcabcbb','bbbbb','pwwkew']
+        temp.reverse()
+        soln = int(''.join([str(i) for i in temp]))
+
+        if negative == True:
+            soln = -1 * soln
         
-        for i in s:
-            print(f'Inputting: s = {i}')
-            print(f'Longest Substring has length: {lengthOfLongestSubstring(i)}')
-            print('=' * terminal_size.columns)
+        
+        if -2 ** 31 >= soln or (2 ** 31) -1 <= soln:
+            soln = 0
+        
+        return soln
+
+#Problem 8: StringToInteger(atoi)
+def myAtoi(s: str) -> int:
+    
+    temp = ''
+    neg = False
+    num = 0
+    for end in range(len(s)):
+        current = s[end]
+
+        match current:
+            case ' ' | '+' :
+                if len(temp) == 0:
+                    continue
+                else:
+                    break
+            case '-':
+                if len(temp) == 0:
+                    neg = True
+                    continue
+                else:
+                    break
+        if end > 0 and current == ('-' or  '+') and s[end - 1] == ('+' or '-'):
+            break
+        
+        try:
+            int(current)
+        except:
+            break
+        else:
+            temp += current
+
+    if len(temp) > 0:
+        num = int(temp)
+        if neg == True:
+            num = -1 * num
+
+    if num < -2**31:
+        num = -2**31
+    elif num > 2**31 - 1:
+        num = 2**31 - 1
+    return num
             
-        own_string = input('Would you like to try putting in your own string? (y/n) ')
-        if own_string == 'y':
-            print('Great! Type in your own string, without spaces of course!')
-            new_s = input()
-            print(f'The string "{new_s}" has a longest substring of length {lengthOfLongestSubstring(new_s)}')
-        elif own_string == 'n' or own_string == None:
-            print('Exiting...')
-            exit()
-    case 0:
-        print('Exiting Program')
-        exit()
+    return num
+
+                
