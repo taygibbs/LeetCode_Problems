@@ -6,7 +6,7 @@ Created on Wed Sep 25 14:18:42 2024
 """
 import LeetcodeSolutions as lcs
 import os
-
+import sys
 
 
 terminal_size = os.get_terminal_size()
@@ -77,7 +77,7 @@ match prob:
             print(f'The string "{new_s}" has a longest substring of length {lcs.lengthOfLongestSubstring(new_s)}')
         elif own_string == 'n' or own_string == None:
             print('Exiting...')
-            exit()
+            sys.exit()
             
     case '4':
         
@@ -102,7 +102,7 @@ match prob:
             print(f'The integer {new_s} has the reversed integer {lcs.reverse(new_s)}')
         elif own_string == 'n' or own_string == None:
             print('Exiting...')
-            exit()
+            sys.exit()
     case '8':
         s = ['42','   -042','1337c0d3','0-1','words and 987']
         
@@ -112,4 +112,4 @@ match prob:
         
     case 0:
         print('Exiting Program')
-        exit()
+        sys.exit()

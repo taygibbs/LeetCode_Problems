@@ -291,6 +291,7 @@ def reverse(x:int) -> int:
         if -2 ** 31 >= soln or (2 ** 31) -1 <= soln:
             soln = 0
         
+
         return soln
 
 #Problem 8: StringToInteger(atoi)
