@@ -7,46 +7,17 @@ Created on Fri Sep 20 18:31:27 2024
 
 This is a set of code that I am writing to work with the LeetCode problems.
 """
+import numpy as np
 
-import os
-from collections import OrderedDict
 
-class ListNode:
+class ListNode: #for use in problem 2
     def __init__(self, val = 0, next = None):
         self.val = val
         self.next = next
 
-def get_problems(val = None):
-    problems = {0: 'Exit Program', 
-                88:'MergeSortedArray',
-                1:'twoSum',
-                2:'addTwoNumbers (IN PROGRESS)',
-                3:'lengthOfLongestSubstring',
-                4: 'findMedianOfSortedArray', 
-                7: 'reverseInteger', 
-                8: 'String to Integer (atoi)',
-                }
-    
-    sort_probs = sorted(problems.items())
-    
-    if val == None:
-        for key, value in sort_probs:
-            print(key, ":", value, ' : ', get_description(key))
-    else:
-        print(problems[val])
-        
-def get_description(val: int) -> str:
-    desc = {0:'',
-            88:'Merges two sorted arrays into one sorted array',
-            1: 'Finds the earliest indecies which the elements sum to a targeted number',
-            2: 'Adds two LinkedNode lists together reversed', 
-            3: 'Finds the length of the longest substring in a larger string',
-            4: 'Finds the median number of a sorted array',
-            7: 'Takes in an integer and reverses the numbers (ie, 123 -> 321)',
-            8: 'Takes in a string and will find the first set of numbers and its sign (+/-)'
-            }
-                
-    return desc[val]
+
+#Start of the functions that I have made to help with selecting a problem or getting stats
+
 
 #Problem 88:
 """
@@ -59,7 +30,7 @@ The final sorted array should not be returned by the function, but instead be st
 To accommodate this, nums1 has a length of m + n, where the first m elements denote the elements that should be merged, and the last n elements are set to 0 and should be ignored. nums2 has a length of n.
 """
 
-def MergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> None:
+def MergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int):
     """
     Does not retrun anything, modify nums1 instead. 
     """
@@ -81,60 +52,87 @@ def MergeSortedArray(nums1: list[int], m: int, nums2: list[int], n: int) -> None
     
     #else: 
       '''  
-    m_index = m - 1 #the last element index of nums1 that will be merged
-    n_index = n - 1 #the last element index of nums2 that will be merged
-    end = m + n - 1
+    mdx = m - 1 #Last index of nums1 that will be sorted
+    ndx = n - 1 #Last index of nums2 that will be sorted
+    end = m + n - 1 #The last index of the list that will be merged/sorted
     
-    while n_index >= 0: #Starting from the end of the list and going to the beginning. This will loop until we are before the beginning
-        #print('inside while loop')
+    
+    #In the leetcode problem, there was some sort of bug or reason that it would always return the wrong list if m = 0, so this is how I fixed that:
+    if m == 0:
+        for i in range(len(nums2)):
+            nums1[i] = nums2[i]
+    if n == 0:
+        return nums1
+    
+    else:    
+        while ndx >= 0 and end >= 0: #Making sure that if there is 0's in either m or n, then it will prevent infinite looping
         
-        if m_index >= 0 and nums1[m_index] > nums2[n_index]:
-            #print(f"nums1[m_index] = {nums1[m_index]} > {nums2[n_index]} = nums2[n_index]")
-            nums1[end] = nums1[m_index]
-            m_index -= 1
-            
-        elif m_index >= 0 and nums1[m_index] <= nums2[n_index]:
-            #print(f"nums1[m_index] = {nums1[m_index]} < {nums2[n_index]} = nums2[n_index]")
-            nums1[end] = nums2[n_index]
-            n_index -= 1
-            
-        # elif m_index >= 0 and nums1[m_index] == nums2[n_index]:
-        #     nums1[end] = nums2[n_index]
-            
-        else:
-            print('Failure to merge the sorted arrays :(')
-            break
+            # print(f'mdx = {mdx}     nums1[mdx] = {nums1[mdx]}')
+            # print(f'ndx = {ndx}     nums2[ndx] = {nums2[ndx]}')
+            # print('---------------------------------------------')
         
-        end -= 1
+        
+            if mdx >= 0 and nums1[mdx] > nums2[ndx]: #While the 
+                
+                nums1[end] = nums1[mdx]
+                nums1[mdx] = 0
+                mdx -= 1 
+            
+            elif mdx >= 0 and nums1[mdx] <= nums2[ndx]:
+                
+                nums1[end] = nums2[ndx]
+                ndx -= 1
+                
+            elif mdx < 0 and ndx >= 0:
+                
+                 nums1[end] = nums2[ndx]
+                 ndx -= 1
+            
+            end -= 1            
+             
+    return nums1
                     
-    print(f"Merged nums1: {nums1}")
+    #print(f"Merged nums1: {nums1}")
 
 
 #Problem 1
+""" CAN BE REDONE USING THE TWO POINTER PATTERN
+"""
 def twoSum(nums: list[int], target: int) -> list[int]:
-   """
-   Submitted/Accepted with 3977 ms runtime (beating 5%) with 17.22mb of memory (beating 90.42%)
-
-   """
-    #inputs a list, we have to find the solution to which two of the elements of the list
-    #will add up to the target
+    """
+    Submitted/Accepted with 3977 ms runtime (beating 5%) with 17.22mb of memory (beating 90.42%)
+ 
     
-    #index = 0 #the currently looked at index
-   soln = [] #will be two elements long
-   for i in range(len(nums)):
-        #print(i)
-        for k in range(len(nums)):
-            if i <= k:
-                continue
-            
-            if nums[i] + nums[k] == target:
-                soln.append(i)
-                soln.append(k)
-                break
-        if len(soln) ==  2:
-           break     
-   return soln
+     inputs a list, we have to find the solution to which two of the elements of the list
+     will add up to the target
+     
+     index = 0 #the currently looked at index
+     soln = [] #will be two elements long
+     for i in range(len(nums)):
+          #print(i)
+          for k in range(len(nums)):
+              if i <= k:
+                  continue
+             
+              if nums[i] + nums[k] == target:
+                  soln.append(i)
+                  soln.append(k)
+                  break
+          if len(soln) ==  2:
+             break     
+    
+      #Retrying this problem by using the hashmap pattern
+     """
+    numMap = {} #creates a dictionary that will hold the elements and the index
+    for i, num in enumerate(nums):
+        diff = target - num
+        if diff in numMap:
+            return [numMap[diff],i]
+        numMap[num] = i
+    return []
+        
 
+    
 #Problem 2:
 #You are given two non-empty linked lists representing two non-negative integers. 
 #The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
@@ -336,6 +334,215 @@ def myAtoi(s: str) -> int:
         num = 2**31 - 1
     return num
             
-    return num
 
+#Problem 1093. Statistics From a Large Sample
+
+def sampleStats(count: list[int]) -> list[float]:
+    '''This set of code is WAY to expensive to run on lists with a LARGE amount of numbers. Ie, all the memory will be used up due to the list getting WAY TOO LARGE
+    #Count is the amount of times the number corresponding with the index is found in the larger array/list:
+        #ie: count = [0,1,2,3] means og_list = [1,22,333]
+    
+    temp = [] #temp list for finding the original list
+    soln = [] #list corresponding to the soln[0] = min, soln[1] = max, soln[2] = mean, soln[3] = median, soln[4] = mode
+    list_sum = 0
+    max_ind = count.index(max(count))
+    #filling temp list with the og data, though, this method is going to be pretty slow for large lists
+    for i in range(len(count)):
+        if count[i] > 0:
+            for k in range(count[i]):
+                temp.append(i)
+                list_sum += i
+    #Finished filling temp list
+    
+    
+    soln.append(float(min(temp)))
+    soln.append(float(max(temp)))
+    soln.append(float(list_sum / len(temp)))
+    soln.append(findMedianSortedArrays(temp, []))
+    soln.append(count[max_ind] - 1)
+    
+    return soln '''
+
+    non_zero = [i for i, val in enumerate(count) if val != 0]    #gives a list of indexes of non-zero elements
+    
+    min_val = non_zero[0]
+    max_val = non_zero[-1]
+    
+    mode_ind = count.index(max(count)) #Mode value
+
+    mean = 0
+    for i in range(len(count)):
+        
+        mean += (i * count[i])
+        
+    mean = mean / sum(count)
+    
+    #Found a way to work with medians of count representing an og list through the solutions of the leetcode problem: https://leetcode.com/problems/statistics-from-a-large-sample/solutions/5683672/python-solution
+    median = 0
+    total = sum(count)
+    if total % 2 == 1: #odd number of elements
+        mid = (total + 1) // 2 #the number halfway of count + 1
+        for i in range(len(count)):
+            if mid > count[i]: 
+                mid -= count[i]
+            else:
+                median = i
+                break
+        
+        
+    else: #Even case
+        mid1 = 0
+        mid2 = 0
+        mid = total // 2 + 1
+        
+        for i in range(len(count)):
+            if mid > count[i]:
+                mid -= count[i]
+            else:
+                mid1 = i
+                break
+        
+        mid = total // 2
+        
+        for i in range(len(count)):
+            if mid > count[i]:
+                mid -= count[i]
+            else:
+                mid2 = i
+                break
+        median = ( mid1 + mid2 ) / 2
+    
+    return [min_val, max_val, mean, median, mode_ind]
+
+#problem 30. Substring with Concatenation of all words.I am using this problem to start getting used to Sets and how they work
+def findSubstring(s: str, words = list[str]) -> list[int]:
+    #This function 
+    print('Work in Progress')
+    
+    
+#Problem 168: Excel Sheet Column Title based on a column number 
+def convertToTitle(columnNumber: int) -> str:
+    title = '' #solution String
+    while columnNumber > 0: #As long as column number is not 0
+        remainder = (columnNumber-1) % 26 #finds the remainder of columnNum /26 to see how many in the second letter place. Takes into account the use of array index syntax
+        title += chr(ord('A') + remainder) #Finds the letter based on the starting 'A' and how many is in the remainder. Ie, if remainder = 3, then title adds ('A' + 3) = 'D'
+        columnNumber = (columnNumber - 1) // 26 #resets the column number to find the first letter place. So itll end up with a title put first place first, then second
+        
+    return title[::-1]
+        
+#Problem 1590. Make Sum Divisible by P
+def minSubarray(nums: list[int],p: int) -> int:
+    """
+    Takes in a list of integers and an integer. The task is to make the sum of the array divisable by the number p.
+    """
+    remMap = {} #defines a dictionary for remembering the remainders
+    tot = sum(nums)
+    length = len(nums)
+    pre_sum = 0
+    target_remainder = tot % p
+    if target_remainder == 0:
+        return 0
+    
+    for i, num in enumerate(nums):
+        pre_sum = (pre_sum + num) % p
+        current_remainder = (pre_sum - target_remainder) % p
+        
+        if current_remainder in remMap:
+            length = min(length, i - remMap[current_remainder])
+        
+        remMap[pre_sum] = i
+
+    return length
+
+def minimumTotalDistance(robot: list[int], factory: list[list[int]]) -> int:
+    
+    """
+    This is the submission I made, however was not working completely
+    """
+    '''
+    print(f'Input: Robot: {robot}  Factory: {factory}')
+    
+    fact_pos = []    
+    #[[limit],[number of robots in factory]]. 
+    #Index within each list is the corresponding factory. ie position lim[0][0] corresponds to # of robots in fact lim[1][0]
+    
+    fact = {}
+    
+    
+    #separates the factory positions with the limits into a dictionary with all information including current robots in factory
+    for f in factory:
+        fact[f[0]] = [f[1],0]
+        
+        
+    fact_pos = list(fact.keys()) #Postion values
+    fact_lim = list(fact.values()) #Limit values and number of robots in a factory 
+    
+    print(f'Robot Positions: {robot}')
+    print(f'Factory Positions: {fact_pos}')
+    print(f'Factory Limits: {fact_lim}')
+    
+    dist = []
+    curr_dist = 0
+    for r in robot: #going through each robot position
+        print(f'Starting Robot In Position {r}')
+        #print(f'Running Distance Total: {curr_dist}')
+        
+        if r in fact.keys(): #The case of the robot already being on top of a factory
+            print(f'Same Position found: Position {r}')
+            dist.append(0)
+            fact[r][1] += 1
+            
+        else: #Robot is not on top of a factory
+            print(f'Robot {r} is NOT on a factory position')
+
+            for f in fact.values(): #Going through each factory positions
+                print(f'fact.values: {f}')
+                f_pos = f[0]
                 
+            
+                print(f'current distance: {curr_dist}')                
+                
+                if np.abs(r - f[0]) < curr_dist:
+                    curr_dist = np.abs(r-f)
+                else:
+                    if fact[abs(curr_dist) + r][1] < fact[abs(curr_dist) + r][0]: #if the factory is not filled
+                        dist.append(abs(curr_dist)) #adds the current distance to be added
+                        fact[abs(curr_dist) + r][1] += 1
+                        
+    print(f'Final Factory stats: {fact}')
+    '''
+    #Redone with help
+    robot.sort()
+    factory.sort()
+    
+    r = len(robot)
+    f = len(factory)
+    
+    memo = {}
+    
+    def helper(currRobot,currFact, cap):
+        if currRobot == len(robot):
+            return 0
+        if currFact == len(factory):
+            return float('inf')
+        
+        key = (currRobot, currFact, cap)
+        if key in memo:
+            return memo[key]
+        
+        minDist
+        
+    
+    
+    return sum(dist)
+
+
+def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
+    n = 1 #starting with 2nd element to look at the previous element
+    for i in range(1,len(nums)): 
+        if nums[i] != nums[i-1]: #checks for unique values
+            nums[n] = nums[i] #Overwrites duplicated values based on the value of n
+            n += 1
+    return n, nums[:n]
+        
+    
