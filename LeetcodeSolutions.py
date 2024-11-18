@@ -8,7 +8,8 @@ Created on Fri Sep 20 18:31:27 2024
 This is a set of code that I am writing to work with the LeetCode problems.
 """
 import numpy as np
-
+import functools as ft
+from collections import defaultdict
 
 class ListNode: #for use in problem 2
     def __init__(self, val = 0, next = None):
@@ -269,6 +270,37 @@ def longestPalindrome(s: str) -> str:
     if reverse == s:
         print('Palindrome')
         
+#6 ZigZag Conversion
+def convertZigZag(s: str, numRows: int)-> str:
+    def addingListString(nums: list) -> str:
+        new = ''
+        for i in nums:
+            for j in i:
+                new += j
+            return new
+        
+    if numRows == 1:
+        return s    
+    new_s = [[] for _ in range(numRows)]
+    print(new_s)
+    direction = 1
+    index :int = 0
+    
+    for i in s:
+        print(f'Index: {index}')
+        new_s[index].append(i)
+        print(f'new_s: {new_s}')
+        
+        
+        
+        if index == 0:
+            direction = 1 
+        elif index == numRows - 1: #the final list
+            direction = -1
+            
+        index += direction
+    return addingListString(new_s)        
+        
 #Problem #7 ReverseInteger
 def reverse(x:int) -> int:
     
@@ -334,6 +366,26 @@ def myAtoi(s: str) -> int:
         num = 2**31 - 1
     return num
             
+#26
+def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
+    n = 1 #starting with 2nd element to look at the previous element
+    for i in range(1,len(nums)): 
+        if nums[i] != nums[i-1]: #checks for unique values
+            nums[n] = nums[i] #Overwrites duplicated values based on the value of n
+            n += 1
+    return n, nums[:n]
+
+#Determines if a number is a palindrome 
+def isPalindrome(x: int) -> bool:
+    num = str(x)
+    m, n = 0, len(num) - 1
+    for i in range(len(num)//2):
+        if num[m] != num[n]:
+            return False
+        else:
+            m += 1
+            n -= 1
+    return True
 
 #Problem 1093. Statistics From a Large Sample
 
@@ -418,7 +470,66 @@ def sampleStats(count: list[int]) -> list[float]:
 def findSubstring(s: str, words = list[str]) -> list[int]:
     #This function 
     print('Work in Progress')
+
+#problem 55. Jump Game
+def canJump(nums: list[int]) -> int:
+    """
+    The best explanation for this problem was making an analogy to having to drive a certain distance with only a limited amount of gas (represented by the value in each element of the list).
+    The basic idea was that to get to the goal, the car needs a certain amount of gas, so the car will start with the first index's amount of gas, move to the next index, if its value is larger than the current number in the gas, then it would replace
+    and continue moving until the goal has been reached (if it can)
+    """
+    curr_jumps = 0
     
+    for i in nums:
+        if curr_jumps < 0: # the case in which there are no more available jumps
+            return False #cannot make it to the end
+        elif i > curr_jumps:
+            curr_jumps = i
+        curr_jumps -= 1
+    return True
+#Problem 59
+def generateMatrix(n: int) -> list[list[int]]:
+    #The idea behind this one is to go through the 4 different 'directions' that we have to fill the matrix up with. 
+    #So, the first thing is set the outer edges of the matrix then move the edges inwards when the row/column has been filled. 
+    #We start with the top row, fill in with the first n numbers, then move the top row index down (+1), then have the right side filled and moved left one (-1), then bottom filled and moved up one (-1)
+    #   then left side filed, and moved over one (+1). Then this repeats until the n**2 has been hit.
+    
+    
+    matrix = [[0] * n for _ in range(n)] #two dimensional list 
+    
+    top = 0 #top row index
+    bottom = n - 1 #bottom row index
+    
+    left = 0 #left column index
+    right = n - 1 #right column index
+    
+    
+    curr = 1 #number being put into the matrix
+    
+
+    while curr <= n ** 2: #while the current number being put into the matrix is less than the square
+            
+        for i in range(left, right + 1): #filling in the top row, left to right
+            matrix[top][i] = curr
+            curr += 1
+        top += 1
+        
+        for j in range(top, bottom +1): #filling the far right column, top to bottom
+            matrix[j][right] = curr
+            curr += 1
+        right -= 1
+        
+        for i in range(right, left -1, -1): #Filling the bottom row, right to left (decrimenting by one)
+            matrix[bottom][i] = curr
+            curr += 1
+        bottom -= 1
+        
+        for j in range(bottom, top - 1, -1): #fillin in the far left row, bottom to top
+            matrix[j][left] = curr
+            curr += 1
+        left += 1
+            
+    return matrix
     
 #Problem 168: Excel Sheet Column Title based on a column number 
 def convertToTitle(columnNumber: int) -> str:
@@ -454,6 +565,7 @@ def minSubarray(nums: list[int],p: int) -> int:
 
     return length
 
+#2463
 def minimumTotalDistance(robot: list[int], factory: list[list[int]]) -> int:
     
     """
@@ -515,34 +627,32 @@ def minimumTotalDistance(robot: list[int], factory: list[list[int]]) -> int:
     robot.sort()
     factory.sort()
     
-    r = len(robot)
-    f = len(factory)
     
-    memo = {}
     
-    def helper(currRobot,currFact, cap):
-        if currRobot == len(robot):
+    #r: robot index, f: factory index, cap: number of robots in factory
+    @ft.lru_cache(None)
+    def helper(r,f, cap):
+        if r == len(robot):
             return 0
-        if currFact == len(factory):
+        if f == len(factory):
             return float('inf')
         
-        key = (currRobot, currFact, cap)
-        if key in memo:
-            return memo[key]
+        #Robot is skipping factory f (no helper)
+        #
+        skip = helper(r, f+1, 0)
         
-        minDist
+        #robot (r) is assigned to factory (f) if the limit has not been reached
+        if cap + 1 <= factory[f][1]:
+            #since a robot has been assigned, the code moves to the next robot, looks at the same factory, increases limit
+            assign = helper(r+1, f, cap + 1) + abs(robot[r] - factory[f][0])
+            return min(skip, assign)
         
+        return skip
     
-    
-    return sum(dist)
 
 
-def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
-    n = 1 #starting with 2nd element to look at the previous element
-    for i in range(1,len(nums)): 
-        if nums[i] != nums[i-1]: #checks for unique values
-            nums[n] = nums[i] #Overwrites duplicated values based on the value of n
-            n += 1
-    return n, nums[:n]
+
+
+
         
     

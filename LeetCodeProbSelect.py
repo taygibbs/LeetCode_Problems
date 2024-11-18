@@ -24,7 +24,11 @@ def get_problems(val = None):
                 168: 'convertToTitle',
                 1590: 'minSubarray',
                 2463: 'minimumTotalDistance',
-                26: 'removeDuplicates'
+                26: 'removeDuplicates',
+                9: 'isPalindrome',
+                6: 'convertZigZag',
+                55: 'canJump',
+                59: 'generateSpiralMatrix'
                 }
     
     sort_probs = sorted(problems.items())
@@ -49,8 +53,12 @@ def get_description(val: int) -> str:
             30: 'Takes in a string and an array of strings that are to be found within the og array',
             168: 'Takes in an integer and returns the Excel Column Title. (ie, x = 27 returns AA)',
             1590: 'Takes in an list and an integer, then makes the sum of the list divisable by the integer by removing a subarray. Then returns the length of that removed array',
-            2463: 'Takes in two lists corresponding to a robots and factory positions. Then returns an integer based on the minimum distance for robots to travel to the factories.',
-            26: 'Takes in an array and removes duplicates, returning the number of elements in the sorted array'
+            2463: 'Takes in two lists corresponding to a robots and factory positions. Then returns an integer representing the minimum distance for robots to travel to the factories.',
+            26: 'Takes in an array and removes duplicates, returning the number of elements in the sorted array',
+            9: 'Takes in an integer, and returns if the number is a palendromic number or not',
+            6: 'Takes in a string and puts the letters into a zigzag pattern, then returns the strings from left to right, top to bottom',
+            55: 'Takes in a list of integers and returns a boolean on if its possible to reach the end of the list using the values in each index as a "jump" value',
+            59: 'Takes in an integer "n" and returns an nxn spiral matrix'
             }
                 
     return desc[val]
@@ -67,10 +75,27 @@ def get_Submission_Status():
               1093: ('Accepted', 2),
               1590: ('Unsub.', 3),
               2463: ('Unsub.',0),
-              26: ('Accepted',3)
+              26: ('Accepted',3),
+              9: ('Accepted', 2),
+              6: ('Accepted',3),
+              55: ('Accepted', 1),
+              59: ('Accepted', 1)
               }
     
     return status
+
+#Extra functions to prevent repition in each problem selections
+
+def inPrint(inList):
+    print(f'Inputting {inList}')
+    
+def askForInput() -> bool:
+    ans = input('Would you like to enter your own number(s)? (y/n): ')
+    
+    if ans == 'y':
+        return True
+    else:
+        return False
 
 def run_Problem(prob: int):
     match prob:
@@ -224,13 +249,58 @@ def run_Problem(prob: int):
         case '2463':
             robot = [[0,2,6],[0,2],[5,8]]
             factory = [[[2,2],[5,2]],[2,2],[4,10]]
-            
+            for i in range(len(robot)):
+                print(f'Inputting: Robot: {robot[i]}   Factories: {factory[i]}')
+                print(f'Minimum Distance: {lcs.minimumTotalDistance(robot[i], factory[i])}')
         case '26':
             nums = [[1,1,2],[0,0,1,1,1,2,2,3,3,4]]
             for i in nums:
                 print(f'Inputing: {i}')
                 print(f'Array with duplicates removed is length: {lcs.removeDuplicates(i)}')
+        
+        case '9':
+            nums = [121,-121,10,1000021]
+            for i in nums:
+                print(f'Inputting: {i}')
+                print(f'Is {i} a palindrome?: {lcs.isPalindrome(i)}')
+            res = input('Would you like to input a number to check if its palindromic? (y/n)')
+            if res == 'y':
+                number = input('Input a number you would like to check (to exit, input 0):')
+                while number != 0:
+                    print(f'Inputting: {number}')
+                    print(f'Is {i} a palindrome?: {lcs.isPalindrome(number)}')
+                    
+                    number = input('Input a number you would like to check (to exit, input 0):')
             
+        case '55':
+            nums = [[2,3,1,1,4],[3,2,1,0,4]]
+            for i in nums:
+                print(f'\nInputting: {i}')
+                print(f'Can we reach the end?: {lcs.canJump(i)}')
+        case '59':
+            nums = [3,1]
+            
+            for i in nums:
+                inPrint(i)
+                matrix = lcs.generateMatrix(i)
+                print('Spiral Matrix:')
+                for j in matrix:
+                    print(j)
+            ans = askForInput()
+            while ans == True:
+                try:
+                    num = int(input('Enter an integer: '))
+                except ValueError:
+                    print('Value entered was not an integer. Exiting')
+                    ans = False
+                else:
+                    inPrint(num)
+                    matrix = lcs.generateMatrix(num)
+                    for j in matrix:
+                        print(j)
+
+                
+                
         case 0:
             print('Exiting Program')
             sys.exit()
