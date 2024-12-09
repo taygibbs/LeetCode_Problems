@@ -20,17 +20,21 @@ def stats_Main():
     stats = lcps.get_Submission_Status()
     column_names = {0:'Status', 1:'Attempts'}
     
-    df_stats = pd.DataFrame.from_dict(stats,).transpose()
+    df_stats = pd.DataFrame.from_dict(stats).transpose()
     df_stats = df_stats.rename(columns = column_names)
     
-    df_acc = df_stats[df_stats.Attempts == 'Accepted']
-    df_rej = df_stats[df_stats.Status == 'Unsub']
+    df_acc = df_stats[df_stats.Status == 'Accepted']
+    df_rej = df_stats[df_stats.Status == 'Unsub.']
     
     tot_attempts = df_stats['Attempts'].sum() #total number of attempts for all problems
     avg_attempts = df_stats.Attempts.mean() #Average number of attempts per problem
     max_attempts = df_stats.index[df_stats.Attempts.max()] #Index of the highest attempts
     
     print(f'LeetCode Stats (So Far):\nTotal Number of Attempts: {tot_attempts} Attempts\n' +
-          f'Avg. Number of Attempts: {avg_attempts} Attempts Per Problems')
+          f'Avg. Number of Attempts: {round(avg_attempts,2)} Attempts Per Problems')
+    print(f'Number of Problems Attempted: {len(df_stats)}\n' + 
+          f'Number of Accepted Submissions: {len(df_acc)}\n' + 
+          f'Number of Unaccepted Submissions: {len(df_rej)}')
+    
     
     df_stats.to_excel(filepath_name)

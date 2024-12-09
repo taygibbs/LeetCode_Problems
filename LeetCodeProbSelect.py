@@ -28,17 +28,22 @@ def get_problems(val = None):
                 9: 'isPalindrome',
                 6: 'convertZigZag',
                 55: 'canJump',
-                59: 'generateSpiralMatrix'
+                59: 'generateSpiralMatrix',
+                54: 'spiralOrder',
+                28: 'needleHaystack',
+                27: 'removeElement',
+                17: 'letterCombinations',
+                2054: 'maxTwoEvents'
                 }
     
     sort_probs = sorted(problems.items())
     
     if val == None:
         for key, value in sort_probs:
-            print(key, ":", value, ' : ', get_description(key))
+            print(key, ":", value, ' : ', get_description(key) + '\n')
     else:
         print('Problem: ' + problems[val] + '\n'
-              + 'Description: ' + get_description(val))
+              + 'Description: ' + get_description(val) + '\n')
         
 def get_description(val: int) -> str:
     desc = {0:'',
@@ -58,7 +63,12 @@ def get_description(val: int) -> str:
             9: 'Takes in an integer, and returns if the number is a palendromic number or not',
             6: 'Takes in a string and puts the letters into a zigzag pattern, then returns the strings from left to right, top to bottom',
             55: 'Takes in a list of integers and returns a boolean on if its possible to reach the end of the list using the values in each index as a "jump" value',
-            59: 'Takes in an integer "n" and returns an nxn spiral matrix'
+            59: 'Takes in an integer "n" and returns an nxn spiral matrix',
+            54: 'Takes a list of lists of integers representing a mxn matrix, then returns a list of the integers going through the matrix in a spiral pattern',
+            28: 'Takes in two strings, haystack and a needle, and returns the first index of where the needle can be found within haystack (if its in it)',
+            27: 'Takes in a list of nums as integers and value as an integer, then returns the list with the value int removed and the length of the new list',
+            17: 'Takes in a string of less than 4 numbers between 2-9 and returns the possible letter combinations as if the numbers were being typed into a phone.',
+            2054: 'Takes in a list of lists of ints that represent events happening in time and the value that is acheived by that event. It returns the largest value achieved by the events without overlapping'
             }
                 
     return desc[val]
@@ -79,7 +89,12 @@ def get_Submission_Status():
               9: ('Accepted', 2),
               6: ('Accepted',3),
               55: ('Accepted', 1),
-              59: ('Accepted', 1)
+              59: ('Accepted', 1),
+              54: ('Accepted', 4),
+              28: ('Accepted', 5),
+              27: ('Accepted', 1),
+              17: ('Accepted',1),
+              2054: ('Accepted', 1)
               }
     
     return status
@@ -299,8 +314,38 @@ def run_Problem(prob: int):
                     for j in matrix:
                         print(j)
 
+        case '28':
+            haystacks = ['sadbutsad', 'leetcode','abc','a']
+            needle = ['sad','leeco','c','a']
+            
+            for i in range(len(haystacks)):
+                print(f'Inputting: Haystack: {haystacks[i]} Needle: {needle[i]}')
+                result = lcs.strStr(haystacks[i], needle[i])
+                if result == -1:
+                    print('No needle found in haystack')
+                else:
+                    print(f'Needle found at index: {result}')
+            
+        case '27':
+            nums = [[0,1,2,2,3,0,4,2],[3,2,2,3]]
+            vals = [2,3]
+            
+            for i in range(len(nums)):
+                print(f'Inputting: nums: {nums[i]} val: {vals[i]}')
+                n, m = lcs.removeElement(nums[i], vals[i])
+                print(f'Nums: {n} length: {m}')
+        
+        case '17':
+            digits = ['23','','2','45']
+            for i in digits:
+                inPrint(i)
+                print(f'Combiantions: {lcs.letterCombinations(i)}')
                 
-                
+        case '2054':
+            events = [[[1,3,2],[4,5,2],[2,4,3]],[[1,3,2],[4,5,2],[1,5,5]], [[1,5,3],[1,5,1],[6,6,5]]]
+            for i in events:
+                inPrint(i)
+                print(f'Max value: {lcs.maxTwoEvents(i)}')
         case 0:
             print('Exiting Program')
             sys.exit()

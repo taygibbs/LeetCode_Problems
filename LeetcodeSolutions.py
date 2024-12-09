@@ -10,6 +10,7 @@ This is a set of code that I am writing to work with the LeetCode problems.
 import numpy as np
 import functools as ft
 from collections import defaultdict
+import heapq
 
 class ListNode: #for use in problem 2
     def __init__(self, val = 0, next = None):
@@ -366,6 +367,41 @@ def myAtoi(s: str) -> int:
         num = 2**31 - 1
     return num
             
+#17 Letter Combinations of a phone number
+"""
+The main idea of this code is that we call the backtrack function with the starting index. 
+
+"""
+def letterCombinations(digits: str) -> list[str]:
+    if len(digits) <= 0 or len(digits) > 4: #prevents digits from being less = 0 or greater than 4
+        return []
+    d_l = {
+        '2' : 'abc',
+        '3' : 'def',
+        '4' : 'ghi',
+        '5' : 'jkl',
+        '6' : 'mno',
+        '7' : 'pqrs',
+        '8' : 'tuv',
+        '9' : 'wxyz'
+        }
+    
+    n = len(digits)
+    soln = []
+    ans = []
+    def backtrack(i):
+        if i == n: #final index case
+            ans.append(''.join(soln))
+            return
+        num = digits[i] #The string of the number we are currently looking at
+        
+        for j in d_l[num]: #going through each of the letters in the 
+            soln.append(j) #adding the value to solution list
+            
+            backtrack(i+1) #Looks at the next number and will add
+            soln.pop() #removes the character 
+    backtrack(0)
+    return ans
 #26
 def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
     n = 1 #starting with 2nd element to look at the previous element
@@ -386,6 +422,72 @@ def isPalindrome(x: int) -> bool:
             m += 1
             n -= 1
     return True
+
+#27 remove duplicates from list
+def removeElement(nums: list[int], val: int) -> int:
+    
+    ind = 0         
+    while ind < len(nums):
+        #print(f'Length of nums: {len(nums)} Ind: {ind} nums[ind]: {nums[ind]}')
+        if nums[ind] == val:
+            nums.pop(ind)
+        else:
+            ind += 1
+        
+    
+    
+    return nums, len(nums)
+
+#28 Finding the index of the first occurrence in a string
+def strStr(haystack: str, needle: str) -> int:
+    left = 0
+    right = len(needle)
+    if haystack == needle:
+        return 0
+    elif len(needle) == 1 and needle in haystack:
+        return haystack.index(needle)
+    elif needle in haystack:
+        while right <= len(haystack):
+            if haystack[left:right] == needle:
+                return left
+            else:
+                left += 1
+                right += 1
+    return -1
+
+#29
+def divide(dividend: int, divisor: int) -> int:
+    
+    #Checking to see if numbers are within bounds
+    
+    #If statement for if either of the two values are negative
+    if (dividend < 0 and divisor > 0) or (dividend > 0 and divisor < 0):
+        sign = -1
+    else:
+        sign = 1
+        
+    #going down a list of cases for dividing
+    divisor = abs(divisor)
+    dividend = abs(dividend)
+    if dividend == 0 or dividend < divisor:
+        return 0
+    elif dividend == divisor:
+        return sign * 1
+    elif divisor == 1 or divisor == -1:
+        return sign * dividend
+    else:
+        
+        
+        ind = 0
+        while (dividend > divisor and dividend >= 0):
+            if dividend - divisor > 0:
+                dividend -= divisor
+                ind += 1
+        
+    
+    
+    return sign * ind
+            
 
 #Problem 1093. Statistics From a Large Sample
 
@@ -471,6 +573,73 @@ def findSubstring(s: str, words = list[str]) -> list[int]:
     #This function 
     print('Work in Progress')
 
+
+#Problem 54: Spiral Matrix
+def spiralOrder(matrix: list[list[int]]) -> list[int]:
+    
+    
+    
+    top = 0
+    bottom = len(matrix) - 1
+    left = 0
+    right = len(matrix[0]) - 1
+    last = 0
+    for i in matrix:
+        for j in i:
+            last += 1
+    curr = 0
+    final = []
+    
+    if bottom == 0:
+        return matrix[bottom]
+    
+    if right == 0:
+        for i in matrix:
+            final.append(i[0])
+        return final
+    
+    while curr < last:
+        
+        for i in range(left, right +1):
+            print(f'top (const): {top}   i (+1): {i}')
+            final.append(matrix[top][i])
+            curr += 1
+        top += 1
+        
+        if curr >= last:
+            break
+        print(f'final: {final}')
+        print(f'curr1: {curr}')
+        for j in range(top, bottom + 1):
+            print(f' j(+1): {j}   right (const): {right}')
+            final.append(matrix[j][right])
+            curr += 1
+        right -= 1
+        if curr >= last:
+            break
+        print(f'final: {final}')
+        print(f'curr2: {curr}')
+        for i in range(right, left - 1, -1):
+            print(f'i(+1): {i}   bottom (const): {bottom}')
+            final.append(matrix[bottom][i])
+            curr += 1
+        if curr >= last:
+            break
+        bottom -= 1
+        
+        print(f'final: {final}')
+        print(f'curr3: {curr}')
+        for j in range(bottom, top - 1, -1):
+            print(f'j(+1): {j}   left (const): {left}')
+            final.append(matrix[j][left])
+            curr += 1
+        left += 1
+
+        print(f'curr4: {curr}')
+        #print(final)
+    return final
+        
+        
 #problem 55. Jump Game
 def canJump(nums: list[int]) -> int:
     """
@@ -650,9 +819,33 @@ def minimumTotalDistance(robot: list[int], factory: list[list[int]]) -> int:
         return skip
     
 
-
-
-
-
+#2054 Max value of two non overlapping events
+def maxTwoEvents(events: list[list[int]]) -> bool:
+    events.sort()
+    
+    #Start of my attempt
+    # for s,e,v in events: #s: start time, e: end time, v: value
+    #     while 
+    
+    
+    #start of the attmept on the discussion/solutions
+    best_previous = 0
+    best = max(v for _,_, v in events) #finds the best value using list comprehension
+    tracking = [] #keeps track
+    index = 0
+    for i,j,k in events:
+        #print(f'index: {index}')
+        #current starting time is i
+        #current ending time is j
+        #current value is k
+        while len(tracking) > 0 and tracking[0][0] <= i: 
+            _, small = heapq.heappop(tracking) # the _ is because we are removing a tuple from the heap and need to look at the value, not the end time
+            #print(f'smallest: {small}')
+            best_previous = max(best_previous, small)
+        heapq.heappush(tracking,(j+1, k)) #pushes the values of the end time + 1 and the value.
+        #print(f'heap: {tracking}')
+        best = max(best, best_previous + k) #finds the largest value between the largest in the events, or from combined events
+        index += 1
+    return best
         
     

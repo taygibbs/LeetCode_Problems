@@ -4,8 +4,8 @@ Created on Wed Sep 25 14:18:42 2024
 
 @author: tayta
 """
-import LeetcodeSolutions as lcs
-import LeetCodeProbSelect as lcps
+import LeetcodeSolutions as lcs #LeetcodeSolutions.py
+import LeetCodeProbSelect as lcps #LeetCodeProblemSelect.py
 import os
 
 
