@@ -11,6 +11,8 @@ import numpy as np
 import functools as ft
 from collections import defaultdict
 import heapq
+from math import floor
+from collections import deque
 
 class ListNode: #for use in problem 2
     def __init__(self, val = 0, next = None):
@@ -848,4 +850,42 @@ def maxTwoEvents(events: list[list[int]]) -> bool:
         index += 1
     return best
         
+#2558 Take Gifts from the Richest Pile
+def pickGifts(gifts: list[int], k: int) -> int:
+    
+    for i in range(k):
+        #print(f'i: {i}')
+        ind_large = gifts.index(max(gifts)) #finds the index of the largest pile of gifts from the gifts list
+        #print(f'Largest index: {ind_large}')
+        gifts[ind_large] = floor((gifts[ind_large]) ** 0.5)
+        
+    return sum(gifts)
+
+#2762 Continuous SubArrays. Finds the number of subarrays where the max and minimum values are less than or equal to 2.
+#Originally, I started this problem thinking it was just a simple problem of finding the number of subarrays that could be made using 1,2 and 3 elements. However, I found that it wasn't just that
+# The best discussion way to work on this problem was using a sliding window structure. So I will be trying my best to find out how to do it that way. The approach for this took me a minute but I figured out
+# a little bit on how to deal with it. This also uses a deque (double ended queue) to keep track of the mins/maxs of the arrays. 
+# first, we start with the two pointers being 0 and moving the right pointer when we want to increase our window size. 
+def continuousSubarrays(nums: list[int]) -> int:
+    
+    l, res = 0,0
+    minD, maxD = deque(), deque() #minD stores all the indices of the smallest to largest integers, while maxd stores all the indices of the largest to smallest integers
+    
+    for r in range(len(nums)): #r represents the right pointer
+        
+        while minD and nums[minD[-1]] >= nums[r]: minD.pop()
+        while maxD and nums[maxD[-1]] <= nums[r]: maxD.pop()
+        
+        minD.append(r)
+        maxD.append(r)
+        
+        while nums[maxD[0]] - nums[minD[0]] > 2:
+            l += 1
+            if minD[0] < l: minD.popleft()
+            if maxD[0] < l: maxD.popleft()
+        
+        res += r - l + 1
+    
+    return res
+
     

@@ -33,7 +33,9 @@ def get_problems(val = None):
                 28: 'needleHaystack',
                 27: 'removeElement',
                 17: 'letterCombinations',
-                2054: 'maxTwoEvents'
+                2054: 'maxTwoEvents',
+                2558: 'pickGifts',
+                2762: 'continuousSubarrays'
                 }
     
     sort_probs = sorted(problems.items())
@@ -68,7 +70,9 @@ def get_description(val: int) -> str:
             28: 'Takes in two strings, haystack and a needle, and returns the first index of where the needle can be found within haystack (if its in it)',
             27: 'Takes in a list of nums as integers and value as an integer, then returns the list with the value int removed and the length of the new list',
             17: 'Takes in a string of less than 4 numbers between 2-9 and returns the possible letter combinations as if the numbers were being typed into a phone.',
-            2054: 'Takes in a list of lists of ints that represent events happening in time and the value that is acheived by that event. It returns the largest value achieved by the events without overlapping'
+            2054: 'Takes in a list of lists of ints that represent events happening in time and the value that is acheived by that event. It returns the largest value achieved by the events without overlapping',
+            2558: 'Takes in a list of ints and an integer, k, that represents the number of seconds to take the max gifts and square roots it. The resulting output is the sum of all the gifts after k seconds.',
+            2762: 'Takes in a list of ints and finds the number of subarrays where the min and max of the subarray are less than or equal to two.'
             }
                 
     return desc[val]
@@ -94,7 +98,8 @@ def get_Submission_Status():
               28: ('Accepted', 5),
               27: ('Accepted', 1),
               17: ('Accepted',1),
-              2054: ('Accepted', 1)
+              2054: ('Accepted', 1),
+              2558: ('Accepted', 1)
               }
     
     return status
@@ -346,6 +351,19 @@ def run_Problem(prob: int):
             for i in events:
                 inPrint(i)
                 print(f'Max value: {lcs.maxTwoEvents(i)}')
+                
+        case '2558':
+            gifts = [[25,64,9,4,100],[1,1,1,1]]
+            for i in gifts:
+                inPrint(i)
+                
+                print(f'Sum after k = 4 seconds: {lcs.pickGifts(i,4)}')
+              
+        case '2762':
+            nums = [[5,4,2,4],[1,2,3],[31,30,31,32]]
+            for i in nums:
+                inPrint(i)
+                print(f'Number of subarrays: {lcs.continuousSubarrays(i)}')
         case 0:
             print('Exiting Program')
             sys.exit()
