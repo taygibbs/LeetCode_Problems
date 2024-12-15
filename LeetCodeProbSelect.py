@@ -35,7 +35,9 @@ def get_problems(val = None):
                 17: 'letterCombinations',
                 2054: 'maxTwoEvents',
                 2558: 'pickGifts',
-                2762: 'continuousSubarrays'
+                2762: 'continuousSubarrays',
+                20: 'isValid',
+                13: 'romanToInt'
                 }
     
     sort_probs = sorted(problems.items())
@@ -72,7 +74,9 @@ def get_description(val: int) -> str:
             17: 'Takes in a string of less than 4 numbers between 2-9 and returns the possible letter combinations as if the numbers were being typed into a phone.',
             2054: 'Takes in a list of lists of ints that represent events happening in time and the value that is acheived by that event. It returns the largest value achieved by the events without overlapping',
             2558: 'Takes in a list of ints and an integer, k, that represents the number of seconds to take the max gifts and square roots it. The resulting output is the sum of all the gifts after k seconds.',
-            2762: 'Takes in a list of ints and finds the number of subarrays where the min and max of the subarray are less than or equal to two.'
+            2762: 'Takes in a list of ints and finds the number of subarrays where the min and max of the subarray are less than or equal to two.',
+            20: 'Takes in a string consisting of {},[], or () in any order and returns true if there is sufficient open and closing brackets, but returns false if there is a nonclosed/opened.',
+            13: 'Takes in a string of roman numeral letters and returns the integer that those numerals represent'
             }
                 
     return desc[val]
@@ -99,7 +103,9 @@ def get_Submission_Status():
               27: ('Accepted', 1),
               17: ('Accepted',1),
               2054: ('Accepted', 1),
-              2558: ('Accepted', 1)
+              2558: ('Accepted', 1),
+              20: ('Accepted', 5),
+              13: ('Accepted', 1)
               }
     
     return status
@@ -107,7 +113,7 @@ def get_Submission_Status():
 #Extra functions to prevent repition in each problem selections
 
 def inPrint(inList):
-    print(f'Inputting {inList}')
+    print(f'Inputting: {inList}')
     
 def askForInput() -> bool:
     ans = input('Would you like to enter your own number(s)? (y/n): ')
@@ -364,6 +370,18 @@ def run_Problem(prob: int):
             for i in nums:
                 inPrint(i)
                 print(f'Number of subarrays: {lcs.continuousSubarrays(i)}')
+        
+        case '20':
+            p = ["()","()[]{}","(]","([])","]"]
+            for i in p:
+                inPrint(i)
+                print(f'Sufficient?: {lcs.isValid(i)}\n')
+                
+        case '13':
+            nums = ["III","LVIII","MCMXCIV"]
+            for i in nums:
+                inPrint(i)
+                print(f'Number: {lcs.romanToInt(i)}\n')
         case 0:
             print('Exiting Program')
             sys.exit()

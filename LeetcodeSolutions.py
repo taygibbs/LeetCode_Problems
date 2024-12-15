@@ -368,7 +368,38 @@ def myAtoi(s: str) -> int:
     elif num > 2**31 - 1:
         num = 2**31 - 1
     return num
+
+def romanToInt(s: str) -> int:
+    numerals = {'I': 1,
+                'V': 5,
+                'X': 10,
+                'L': 50,
+                'C': 100,
+                'D': 500,
+                'M': 1000}     
+    s.upper()
+    number = 0 
+    prev = ''    
+    for i in range(len(s)-1, -1, -1): #going through each of the different numerals one-by-one starting from the last letter. This will make it easier to deal with the letters for subtraction
+        curr = s[i]
+        #there will be 6 cases in which a letter before another letter means 
+        
+        #case where I is placed before V or X (making 4 or 9)
+        if (curr == 'I' and prev == 'V') or (curr == 'I' and prev == 'X'):
+            number -= 1
             
+        elif (curr == 'X' and prev == 'L') or (curr == 'X' and prev == 'C'):
+            number -= 10
+            
+        elif (curr == 'C' and prev == 'D') or (curr == 'C' and prev == 'M'):
+            number -= 100
+            
+        else:
+            number += numerals[curr]
+        
+        prev = s[i] #placed as the last action so that it is updated for the next iteration
+    return number
+
 #17 Letter Combinations of a phone number
 """
 The main idea of this code is that we call the backtrack function with the starting index. 
@@ -404,6 +435,36 @@ def letterCombinations(digits: str) -> list[str]:
             soln.pop() #removes the character 
     backtrack(0)
     return ans
+
+#20 Valid Parentheses. Uses a stack data structure
+def isValid(s: str) -> bool:
+    
+    p = [] #stack list
+    
+    for i in s:
+       
+        if i == "(" or i == "[" or i == "{": #case of the opening brackets
+            p.append(i)
+            continue
+        
+        else: #closing bracket checks
+            if len(p) < 1: return False #for the case which there is a closing bracket first
+            
+            if i == ')' and p[-1] == '(': 
+                p.pop()
+            
+            elif i == ']' and p[-1] == '[':
+                p.pop()
+            
+            elif i == '}' and p[-1] == '{':
+                p.pop()
+            
+            else: return False
+        
+        
+    return True
+
+
 #26
 def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
     n = 1 #starting with 2nd element to look at the previous element
@@ -887,5 +948,6 @@ def continuousSubarrays(nums: list[int]) -> int:
         res += r - l + 1
     
     return res
+
 
     
