@@ -37,7 +37,9 @@ def get_problems(val = None):
                 2558: 'pickGifts',
                 2762: 'continuousSubarrays',
                 20: 'isValid',
-                13: 'romanToInt'
+                13: 'romanToInt',
+                35: 'searchInsert',
+                58: 'lengthOfLastWord'
                 }
     
     sort_probs = sorted(problems.items())
@@ -76,12 +78,14 @@ def get_description(val: int) -> str:
             2558: 'Takes in a list of ints and an integer, k, that represents the number of seconds to take the max gifts and square roots it. The resulting output is the sum of all the gifts after k seconds.',
             2762: 'Takes in a list of ints and finds the number of subarrays where the min and max of the subarray are less than or equal to two.',
             20: 'Takes in a string consisting of {},[], or () in any order and returns true if there is sufficient open and closing brackets, but returns false if there is a nonclosed/opened.',
-            13: 'Takes in a string of roman numeral letters and returns the integer that those numerals represent'
+            13: 'Takes in a string of roman numeral letters and returns the integer that those numerals represent.',
+            35: 'Takes in a list of integers and a target int, then finds the index, or if its not in the list, finds the index where it would be inserted',
+            58: 'Takes in a string and finds the length of the last word in the string'
             }
                 
     return desc[val]
 
-def get_Submission_Status():
+def getSubmissionStatus():
     #Status format: problem #: ('Accepted/NotSubmitted', # of tries to get accepted)
     status = {1: ('Accepted',1),
               2: ('Unsub.', 0),
@@ -105,7 +109,9 @@ def get_Submission_Status():
               2054: ('Accepted', 1),
               2558: ('Accepted', 1),
               20: ('Accepted', 5),
-              13: ('Accepted', 1)
+              13: ('Accepted', 1),
+              35: ('Accepted', 2),
+              58: ('Accepted', 1)
               }
     
     return status
@@ -382,6 +388,20 @@ def run_Problem(prob: int):
             for i in nums:
                 inPrint(i)
                 print(f'Number: {lcs.romanToInt(i)}\n')
+                
+        case '35':
+            nums = [1,3,5,6]
+            target = [5,2,7]
+            inPrint(nums)
+            for i in target:
+                inPrint(i)
+                print(f'{i} at index {lcs.searchInsert(nums, i)}\n')
+                
+        case '58':
+            s = ['Hello World','  Fly me    to   the  moon   ', 'Luffy is still JoyBoy']
+            for i in s:
+                inPrint(i)
+                print(f'Length of last word: {lcs.lengthOfLastWord(i)}\n')
         case 0:
             print('Exiting Program')
             sys.exit()

@@ -13,8 +13,9 @@ from collections import defaultdict
 import heapq
 from math import floor
 from collections import deque
+from typing import Optional #for the optional type. Usually for linked lists
 
-class ListNode: #for use in problem 2
+class ListNode: #for use in problem 2 and 21
     def __init__(self, val = 0, next = None):
         self.val = val
         self.next = next
@@ -369,6 +370,7 @@ def myAtoi(s: str) -> int:
         num = 2**31 - 1
     return num
 
+#13 roman numerals to integer
 def romanToInt(s: str) -> int:
     numerals = {'I': 1,
                 'V': 5,
@@ -399,6 +401,7 @@ def romanToInt(s: str) -> int:
         
         prev = s[i] #placed as the last action so that it is updated for the next iteration
     return number
+
 
 #17 Letter Combinations of a phone number
 """
@@ -463,7 +466,27 @@ def isValid(s: str) -> bool:
         
         
     return True
+#21 Merge Two Sorted Linked Lists
+def mergeTwoLists(list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
 
+    merged = ListNode() #start with a dummy node
+    curr = merged #current node
+    while list1 and list2: #since list1 and list2 will end at type NONE, this will end when one of the lists is finished.
+        if list1.val < list2.val: #if the value of the node is less than the one of the second. This is condition of sorting
+            curr.next = list2.val #setting the current next node to the value/node of the list2 node
+            list2 = list2.next #setting the list2 node to the next node. !!! Not using list2.val because then its not pointing to the node iteslf but the value of the node and messes with the loop
+        else:
+            curr.next = list1.val #will set the next value to the larger one 
+            list1 = list1.next
+        
+        curr = curr.next #moves to the next node
+        
+    if list1: curr.next = list1 #filling with the remaining list elements for if list1 is longer
+    
+    elif list2: curr.next = list2 #filling with the remaining list elements if list2 is longer
+    
+    return merged.next
+    
 
 #26
 def removeDuplicates(nums: list[int]) -> int: #Using a two pointer system
@@ -550,7 +573,39 @@ def divide(dividend: int, divisor: int) -> int:
     
     
     return sign * ind
+
+#35 Search Insert Position. Caviat is finding an index with O(log(n)) instead of O(n)
+def searchInsert(nums: list[int], target: int) -> int:
+    #a binary search tree will be faster than O(n)
+    
+    low = 0
+    high = len(nums) - 1
+    
+    while low <= high:
+        mid = (low + high) // 2
+        
+        if target < nums[mid]:
+            high = mid - 1
+        elif target > nums[mid]:
+            low = mid + 1
+        else:
+            return mid
+        
+    return low
+    
+def lengthOfLastWord(s: str) -> int:
+    
+    words = s.split(' ')
+    
+    index = len(words) - 1
+    while index >= 0:
+        
+        if words[index] == '':
+            index -= 1
             
+        else: return len(words[index])
+
+        
 
 #Problem 1093. Statistics From a Large Sample
 
