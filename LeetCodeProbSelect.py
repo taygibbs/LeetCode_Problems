@@ -39,7 +39,8 @@ def get_problems(val = None):
                 20: 'isValid',
                 13: 'romanToInt',
                 35: 'searchInsert',
-                58: 'lengthOfLastWord'
+                58: 'lengthOfLastWord',
+                66: 'plusOne'
                 }
     
     sort_probs = sorted(problems.items())
@@ -80,7 +81,8 @@ def get_description(val: int) -> str:
             20: 'Takes in a string consisting of {},[], or () in any order and returns true if there is sufficient open and closing brackets, but returns false if there is a nonclosed/opened.',
             13: 'Takes in a string of roman numeral letters and returns the integer that those numerals represent.',
             35: 'Takes in a list of integers and a target int, then finds the index, or if its not in the list, finds the index where it would be inserted',
-            58: 'Takes in a string and finds the length of the last word in the string'
+            58: 'Takes in a string and finds the length of the last word in the string.',
+            66: 'Takes in a list of ints representing a larger number seperated and returns a list of the larger number plus one.'
             }
                 
     return desc[val]
@@ -111,7 +113,8 @@ def getSubmissionStatus():
               20: ('Accepted', 5),
               13: ('Accepted', 1),
               35: ('Accepted', 2),
-              58: ('Accepted', 1)
+              58: ('Accepted', 1),
+              66: ('Accepted', 1)
               }
     
     return status
@@ -402,6 +405,12 @@ def run_Problem(prob: int):
             for i in s:
                 inPrint(i)
                 print(f'Length of last word: {lcs.lengthOfLastWord(i)}\n')
+        
+        case '66':
+            digits = [[1,2,3],[4,3,2,1],[9],[9,9,9,9]]
+            for i in digits:
+                inPrint(i)
+                print(f'Plus one: {lcs.plusOne(i)}\n')
         case 0:
             print('Exiting Program')
             sys.exit()

@@ -592,7 +592,8 @@ def searchInsert(nums: list[int], target: int) -> int:
             return mid
         
     return low
-    
+   
+#58 lenght of the last word in a string 
 def lengthOfLastWord(s: str) -> int:
     
     words = s.split(' ')
@@ -605,8 +606,37 @@ def lengthOfLastWord(s: str) -> int:
             
         else: return len(words[index])
 
+#66. Plus One
+def plusOne(digits: list[int]) -> list[int]:
+    
+    carry = False #to make sure that we are keeping track of where there is 9
+    
+    if digits[-1] != 9: #does not need to carry over the 1. BASE CASE
+        digits[-1] += 1
+        return digits
+    
+    else: #the case where adding 1 to the end will carry to another digit
+            #ie. the case 9999 or something will continue to carry over the 1
+            
+        carry = True
         
-
+        r = len(digits) - 2
+        
+        digits[-1] = 0 
+        
+        while carry and r >= 0:
+            if digits[r] == 9: #this is where the increasing from 9
+                digits[r] = 0
+                r -= 1
+                
+            else: #if its not 9
+                digits[r] += 1
+                return digits
+            
+        if carry and r < 0: #the case where all of the numbers were 9 and there is no more numbers
+            digits.insert(0,1)
+        
+    return digits
 #Problem 1093. Statistics From a Large Sample
 
 def sampleStats(count: list[int]) -> list[float]:
