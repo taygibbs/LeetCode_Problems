@@ -25,7 +25,8 @@ eq_print()
 #The number of the problem wanting to be seen
 prob = input('\nInput the number of the problem you would like to see: ')
 
-print('You Selected:\n')
+print('\nYou Selected:\n')
+eq_print()
 problem = lcps.get_problems(int(prob)) #Displays the problem name and description again
 lcps.run_Problem(prob)
 eq_print()

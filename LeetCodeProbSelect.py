@@ -40,7 +40,9 @@ def get_problems(val = None):
                 13: 'romanToInt',
                 35: 'searchInsert',
                 58: 'lengthOfLastWord',
-                66: 'plusOne'
+                66: 'plusOne',
+                67: 'addBinary',
+                80: 'removeDuplicatedTwo'
                 }
     
     sort_probs = sorted(problems.items())
@@ -82,7 +84,9 @@ def get_description(val: int) -> str:
             13: 'Takes in a string of roman numeral letters and returns the integer that those numerals represent.',
             35: 'Takes in a list of integers and a target int, then finds the index, or if its not in the list, finds the index where it would be inserted',
             58: 'Takes in a string and finds the length of the last word in the string.',
-            66: 'Takes in a list of ints representing a larger number seperated and returns a list of the larger number plus one.'
+            66: 'Takes in a list of ints representing a larger number seperated and returns a list of the larger number plus one.',
+            67: 'Takes in two strings representing a number in binary and returns the binary sum.',
+            80: 'Takes in a list of ascending integers and returns the list with duplicates with more than two occurences removed and the number of elements after.'
             }
                 
     return desc[val]
@@ -114,7 +118,9 @@ def getSubmissionStatus():
               13: ('Accepted', 1),
               35: ('Accepted', 2),
               58: ('Accepted', 1),
-              66: ('Accepted', 1)
+              66: ('Accepted', 1),
+              67: ('Accepted', 1),
+              80: ('Accepted', 1)
               }
     
     return status
@@ -411,6 +417,21 @@ def run_Problem(prob: int):
             for i in digits:
                 inPrint(i)
                 print(f'Plus one: {lcs.plusOne(i)}\n')
+                
+        case '67':
+            a = ['11','1010']
+            b = ['1','1011']
+            for i in range(len(a)):
+                inPrint(f'a = {a[i]} b = {b[i]}')
+                print(f'Binary Sum: {lcs.addBinary(a[i],b[i])}')
+        
+        case '80':
+            nums = [[1,1,1,2,2,3],[0,0,1,1,1,1,2,3,3]]
+            for i in nums:
+                inPrint(i)
+                val, new = lcs.removeDuplicatesTwo(i)
+                print(f'New Nums: {new} with {val} element(s)\n')
+                
         case 0:
             print('Exiting Program')
             sys.exit()

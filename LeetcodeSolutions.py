@@ -637,8 +637,15 @@ def plusOne(digits: list[int]) -> list[int]:
             digits.insert(0,1)
         
     return digits
-#Problem 1093. Statistics From a Large Sample
 
+#67 Adding Binary
+def addBinary(a: str, b: str) -> str:
+    
+    num = bin(int(a,2) + int(b,2))
+    
+    return num[2:]
+
+#Problem 1093. Statistics From a Large Sample
 def sampleStats(count: list[int]) -> list[float]:
     '''This set of code is WAY to expensive to run on lists with a LARGE amount of numbers. Ie, all the memory will be used up due to the list getting WAY TOO LARGE
     #Count is the amount of times the number corresponding with the index is found in the larger array/list:
@@ -848,6 +855,45 @@ def generateMatrix(n: int) -> list[list[int]]:
             
     return matrix
     
+#problem 80. Remove Duplicates from Sorted Array 2
+def removeDuplicatesTwo(nums: list[int]) -> int:
+    
+    # l = 0
+    # r = 0
+    
+    # while r <= len(nums) - 1:
+    #     if nums[r] == nums[l] and r - l < 2:
+    #         pass
+    #     elif nums[r] == nums[l] and r - l >= 2:
+    #         del nums[r]
+            
+    #     elif nums[r] != nums[l]:
+            
+    
+    
+    occur = {}
+    index = 0
+
+    while index <= len(nums) - 1:
+        curr = nums[index]
+        #print(f'Current at index "{index}": {curr}')
+        if curr not in occur.keys(): #the number has not been seen before
+            #print('Number not seen. Adding to occur')
+            occur[curr] = 1
+        elif curr in occur.keys() and occur[curr] < 2: #number has been seen, but less than 2 times
+            #print(f'curr = {curr} is in occur with it being seen: {occur[curr]} times before.')
+            occur[curr] += 1
+        else: 
+            #print('Removing number')
+            del nums[index]
+            continue
+        index += 1 
+                  
+            
+        #print(f'occur: {occur}\nnew: {nums}\n')
+    return sum(occur.values()), nums
+            
+
 #Problem 168: Excel Sheet Column Title based on a column number 
 def convertToTitle(columnNumber: int) -> str:
     title = '' #solution String
