@@ -1,4 +1,4 @@
-# LeetCode Problem Solution Notes/Thoughts
+# LeetCode Problem Solution Notes/Thoughts (NOT UP-TO-DATE)
  Wrote by Taylor Gibbons with the intent to practice coding concepts
 
 ## Table of Contents:
